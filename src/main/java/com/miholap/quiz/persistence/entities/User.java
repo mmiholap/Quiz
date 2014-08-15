@@ -3,7 +3,7 @@ package com.miholap.quiz.persistence.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Table(name="users")
+@Table(name="user")
 @Entity
 public class User implements Serializable {
     @Id
