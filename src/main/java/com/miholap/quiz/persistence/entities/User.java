@@ -1,22 +1,23 @@
-package com.miholap.quiz.entities;
+package com.miholap.quiz.persistence.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name="users")
 @Entity
-public class User {
-    public static final int USER = 1;
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String login;
     private String password;
-    private int role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private String fullname;
 
     public User() {};
 
-    public User(String login, String password, int role, String fullname) {
+    public User(String login, String password, Role role, String fullname) {
         this.login = login;
         this.password = password;
         this.role = role;
@@ -41,10 +42,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public int getRole() {
+    public Role getRole() {
         return role;
     }
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
     public String getFullname() {
@@ -56,6 +57,6 @@ public class User {
 
     @Override
     public String toString(){
-        return "id:"+id+" login:"+login+" fullname:"+fullname+" password:"+password;
+        return "id:"+id+" login:"+login+" fullname:"+fullname+" password:"+password+" role:"+role;
     }
 }
