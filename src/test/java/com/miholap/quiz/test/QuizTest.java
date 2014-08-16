@@ -2,56 +2,78 @@ package com.miholap.quiz.test;
 
 import com.miholap.quiz.persistence.entities.Question;
 import com.miholap.quiz.persistence.entities.Quiz;
-import junit.framework.TestCase;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.PostConstruct;
+import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PostPersist;
+import javax.persistence.TypedQuery;
 
-import java.sql.Time;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "/spring/application-config.xml" )
 public class QuizTest  {
-    ApplicationContext cntx;
+    @Autowired
     EntityManagerFactory emf;
+
     EntityManager entityManager;
 
+
+    DataInitialization init;// = new DataInitialization(emf);
+
     @Before
-    public void setUp() throws Exception {
-        cntx =new ClassPathXmlApplicationContext("spring/application-config.xml");
-        emf = cntx.getBean(EntityManagerFactory.class);
+    public void before() throws Exception {
+        init = new DataInitialization(emf);
         entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
     }
 
-    //@Test
-    public void quiz_creationTest(){
-        Quiz quiz = new Quiz("Java test for beginners");
-        entityManager.getTransaction().begin();
-        entityManager.persist(quiz);
-
-        quiz = entityManager.find(Quiz.class,1);
+    @After
+    public void after(){
         entityManager.getTransaction().commit();
-        System.out.println(quiz.toString());
-        assertNotNull(quiz);
+    }
+
+    @Test
+    public void testConfigurationLoader(){
+
+    }
+
+
+    @Test
+    public void quiz_creationTest(){
+        final String query = "SELECT qz FROM Quiz qz";
+        init.createQuizs();
+        TypedQuery<Quiz> q =  entityManager.createQuery(query,Quiz.class);
+        List<Quiz> quizs = q.getResultList();
+        assertTrue(quizs.size() > 0);
     }
 
     @Test
     public void question_creation(){
-        quiz_creationTest();
-        entityManager.getTransaction().begin();
-        Quiz quiz = entityManager.find(Quiz.class, 1);
-        Question question = new Question("test question",quiz);
-        entityManager.persist(question);
-        entityManager.getTransaction().commit();
-
-        question = entityManager.find(Question.class,1);
-        System.out.println(question.toString());
-        assertNotNull(question);
+        final String query = "SELECT qz FROM Quiz qz";
+        init.createQuestions();
+        TypedQuery<Quiz> q =  entityManager.createQuery(query,Quiz.class);
+        List<Quiz> quizs = q.getResultList();
+        for(Quiz quiz : quizs){
+            Collection<Question> questions = quiz.getQuestions();
+            for(Question question: questions){
+                System.out.println("DEBUG: "+question.toString());
+            }
+            assertTrue(questions.size() > 0);
+        }
     }
 
 
