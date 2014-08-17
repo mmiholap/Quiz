@@ -1,5 +1,6 @@
 package com.miholap.quiz.test;
 
+import com.miholap.quiz.persistence.entities.Answer;
 import com.miholap.quiz.persistence.entities.Question;
 import com.miholap.quiz.persistence.entities.Quiz;
 
@@ -14,6 +15,7 @@ public class DataInitialization {
     private EntityManagerFactory entityManagerFactory;
     public static  final int QUIZ_SIZE = 10;
     public static final int QUESTION_SIZE = 5;
+    public static final int ANSWER_SIZE = 3;
 
     public DataInitialization(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
@@ -43,6 +45,22 @@ public class DataInitialization {
         entityManager.close();
     }
 
+    public int createAnswers(){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<Answer> answers = generateAnswers();
+        for(Answer answer: answers){
+            entityManager.persist(answer.getQuestion().getQuiz());
+            entityManager.persist(answer.getQuestion());
+            entityManager.persist(answer);
+            entityManager.flush();
+        }
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        return answers.size();
+    }
+
     public List<Quiz> generateQuizes(){
         List<Quiz> quizs = new ArrayList<>(QUIZ_SIZE);
 
@@ -64,5 +82,19 @@ public class DataInitialization {
         }
 
         return questions;
+    }
+
+    public List<Answer> generateAnswers(){
+        Random rand = new Random(47);
+        List<Answer> answers = new ArrayList<>();
+        for(Question question : generateQuestions()){
+            int delta = -1 + rand.nextInt(2);
+            for(int i = 0; i < ANSWER_SIZE + delta; i++){
+                answers.add(new Answer(question.getId()+" answer for a question "+i, question,
+                                        (i>ANSWER_SIZE-1?false:true) ) );
+            }
+        }
+
+        return answers;
     }
 }

@@ -15,6 +15,13 @@ public class Quiz implements Serializable{
     @OneToMany(mappedBy = "quiz")
     private Collection<Question> questions;
 
+    @ManyToMany
+    @JoinTable(
+            name="Catalog",
+            joinColumns = {@JoinColumn(name = "quiz_id",referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id",referencedColumnName = "id")})
+    private Collection<Tag> tags;
+
     public Quiz() {
     }
 
@@ -28,6 +35,14 @@ public class Quiz implements Serializable{
                 "id=" + id +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public Collection<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
     }
 
     public int getId() {

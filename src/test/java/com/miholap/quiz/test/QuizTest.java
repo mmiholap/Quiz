@@ -10,18 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.annotation.PostConstruct;
-import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PostPersist;
 import javax.persistence.TypedQuery;
 
 import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/spring/application-config.xml" )
@@ -31,8 +27,21 @@ public class QuizTest  {
 
     EntityManager entityManager;
 
+    DataInitialization init;
 
-    DataInitialization init;// = new DataInitialization(emf);
+    private final String[] queriesForClearDB = {
+            "DELETE FROM Answer",
+            "DELETE FROM Question",
+            "DELETE FROM Quiz"
+    };
+
+    private void clearDataBase(EntityManager entityManager){
+        entityManager.getTransaction().begin();
+        for(String query : queriesForClearDB) {
+            entityManager.createQuery(query).executeUpdate();
+        }
+        entityManager.getTransaction().commit();
+    }
 
     @Before
     public void before() throws Exception {
@@ -44,6 +53,7 @@ public class QuizTest  {
     @After
     public void after(){
         entityManager.getTransaction().commit();
+        clearDataBase(entityManager);
     }
 
     @Test
@@ -58,7 +68,7 @@ public class QuizTest  {
         init.createQuizs();
         TypedQuery<Quiz> q =  entityManager.createQuery(query,Quiz.class);
         List<Quiz> quizs = q.getResultList();
-        assertTrue(quizs.size() > 0);
+        assertTrue(quizs.size() == DataInitialization.QUIZ_SIZE);
     }
 
     @Test
@@ -74,6 +84,14 @@ public class QuizTest  {
             }
             assertTrue(questions.size() > 0);
         }
+    }
+
+    @Test
+    public void answer_creation(){
+        final String query = "SELECT COUNT(answer.id) FROM Answer answer";
+        long expectCount = init.createAnswers();
+        long count =(long) entityManager.createQuery(query).getSingleResult();
+        assertTrue(expectCount == count);
     }
 
 
