@@ -33,6 +33,32 @@ public class Answer implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Answer answer = (Answer) o;
+
+        if (id != answer.id) return false;
+        if (isActive != answer.isActive) return false;
+        if (isRight != answer.isRight) return false;
+        if (!question.equals(answer.question)) return false;
+        if (!text.equals(answer.text)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + text.hashCode();
+        result = 31 * result + question.hashCode();
+        result = 31 * result + (isRight ? 1 : 0);
+        result = 31 * result + (isActive ? 1 : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +

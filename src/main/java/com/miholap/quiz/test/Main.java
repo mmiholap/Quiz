@@ -1,7 +1,10 @@
 package com.miholap.quiz.test;
 
+import com.miholap.quiz.persistence.entities.Quiz;
 import com.miholap.quiz.persistence.entities.Role;
 import com.miholap.quiz.persistence.entities.User;
+import com.miholap.quiz.services.IQuizService;
+import com.miholap.quiz.services.impl.QuizService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,5 +27,6 @@ public class Main {
         TypedQuery<User> query = entityManager.createQuery("select usr from User usr where usr.id = 1", User.class);
         User testUser  = query.getSingleResult();
         System.out.println(testUser.toString());
+
     }
 }

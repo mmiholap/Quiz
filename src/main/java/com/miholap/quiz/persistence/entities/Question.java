@@ -8,6 +8,9 @@ import java.util.Date;
 
 @Table(name="question")
 @Entity
+@NamedQueries({
+        @NamedQuery(name="Question.activeQuestions", query = "SELECT q FROM Question q WHERE q.quiz.id = :quiz_id AND q.isActive = true")
+})
 public class Question implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,32 @@ public class Question implements Serializable{
     public Question(String text, Quiz quiz) {
         this.text = text;
         this.quiz = quiz;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Question question = (Question) o;
+
+        if (answerTime != question.answerTime) return false;
+        if (id != question.id) return false;
+        if (isActive != question.isActive) return false;
+        if (!quiz.equals(question.quiz)) return false;
+        if (!text.equals(question.text)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + text.hashCode();
+        result = 31 * result + quiz.hashCode();
+        result = 31 * result + answerTime;
+        result = 31 * result + (isActive ? 1 : 0);
+        return result;
     }
 
     @Override

@@ -11,7 +11,11 @@ public class Quiz implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    private String title;
+
     private String description;
+
     @OneToMany(mappedBy = "quiz")
     private Collection<Question> questions;
 
@@ -25,8 +29,9 @@ public class Quiz implements Serializable{
     public Quiz() {
     }
 
-    public Quiz(String description) {
+    public Quiz(String title, String description) {
         this.description = description;
+        this.title = title;
     }
 
     @Override
@@ -34,7 +39,38 @@ public class Quiz implements Serializable{
         return "Quiz{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
+                ", title='" + title + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Quiz quiz = (Quiz) o;
+
+        if (id != quiz.id) return false;
+        if (description != null ? !description.equals(quiz.description) : quiz.description != null) return false;
+        if (!title.equals(quiz.title)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + title.hashCode();
+        return result;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Collection<Tag> getTags() {
