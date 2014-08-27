@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     private String fullname;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private Collection<Statistics> statisticses;
 
     public User() {};

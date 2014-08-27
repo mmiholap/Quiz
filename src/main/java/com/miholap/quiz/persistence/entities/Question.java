@@ -9,7 +9,8 @@ import java.util.Date;
 @Table(name="question")
 @Entity
 @NamedQueries({
-        @NamedQuery(name="Question.activeQuestions", query = "SELECT q FROM Question q WHERE q.quiz.id = :quiz_id AND q.isActive = true")
+        @NamedQuery(name="Question.activeQuestions",
+                query = "SELECT q FROM Question q WHERE q.quiz.id = :quiz_id AND q.isActive = true")
 })
 public class Question implements Serializable{
     @Id
@@ -27,7 +28,7 @@ public class Question implements Serializable{
     @Column(name="is_active")
     private boolean isActive=true;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question",fetch = FetchType.EAGER)
     private Collection<Answer> answers;
 
     public Question() {

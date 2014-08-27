@@ -5,6 +5,7 @@ import com.miholap.quiz.persistence.entities.Question;
 import com.miholap.quiz.persistence.entities.Quiz;
 import com.miholap.quiz.services.IQuestionService;
 import com.miholap.quiz.services.IQuizService;
+import com.miholap.quiz.utility.DataInitialisation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,23 +25,30 @@ public class QuestionServiceTest {
     @Autowired
     private IQuizService quizService;
 
+    @Autowired
+    private DataInitialisation init;
+
     @Before
     public void setUp(){
-        quizService.create(new Quiz("Title","Description"));
+        /*quizService.create(new Quiz("Title","Description"));
         Quiz quiz = quizService.findById(1);
         for(int i = 0; i < 10; i++ ){
             Question question = new Question("question "+i,quiz);
             questionService.create(question);
-        }
+        }*/
+        init.creationFullQuizData();
     }
 
     @Test
     public void testGetNRandomQuestions() throws Exception {
-        int N = 5;
+        int N = 3;
         assertTrue(quizService.findAll().size() == 1);
         List<Question> questions = questionService.getNRandomQuestions(quizService.findById(1),N);
         for (Question q : questions){
             System.out.println(q.toString());
+            for(Answer a: q.getAnswers() ){
+                System.out.println("\t\t"+a.toString());
+            }
         }
         assertTrue(questions.size() > 0 );
     }

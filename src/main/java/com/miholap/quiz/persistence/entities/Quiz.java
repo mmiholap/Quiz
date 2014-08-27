@@ -16,7 +16,7 @@ public class Quiz implements Serializable{
 
     private String description;
 
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz",fetch = FetchType.EAGER)
     private Collection<Question> questions;
 
     @ManyToMany

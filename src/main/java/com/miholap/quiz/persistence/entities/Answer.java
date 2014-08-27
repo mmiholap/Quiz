@@ -5,6 +5,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@NamedQueries(
+        @NamedQuery(name="Answer.selectActiveAnswersForQuiz",
+                query="SELECT a from Answer a where a.question.id = :question_id AND a.isActive = true")
+)
+
 public class Answer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
