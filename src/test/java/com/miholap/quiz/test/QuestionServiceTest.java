@@ -2,10 +2,9 @@ package com.miholap.quiz.test;
 
 import com.miholap.quiz.persistence.entities.Answer;
 import com.miholap.quiz.persistence.entities.Question;
-import com.miholap.quiz.persistence.entities.Quiz;
 import com.miholap.quiz.services.IQuestionService;
 import com.miholap.quiz.services.IQuizService;
-import com.miholap.quiz.utility.DataInitialisation;
+import com.miholap.quiz.utility.DataInit;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,18 +25,7 @@ public class QuestionServiceTest {
     private IQuizService quizService;
 
     @Autowired
-    private DataInitialisation init;
-
-    @Before
-    public void setUp(){
-        /*quizService.create(new Quiz("Title","Description"));
-        Quiz quiz = quizService.findById(1);
-        for(int i = 0; i < 10; i++ ){
-            Question question = new Question("question "+i,quiz);
-            questionService.create(question);
-        }*/
-        init.creationFullQuizData();
-    }
+    private DataInit init;
 
     @Test
     public void testGetNRandomQuestions() throws Exception {

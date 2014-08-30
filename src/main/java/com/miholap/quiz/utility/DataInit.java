@@ -10,8 +10,10 @@ import com.miholap.quiz.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 @Service
-public class DataInitialisation {
+public class DataInit {
 
     @Autowired
     private IQuizService quizService;
@@ -25,8 +27,11 @@ public class DataInitialisation {
     //@Autowired
     //private IUserService userService;
 
+    @PostConstruct
     public void creationFullQuizData(){
-        Quiz quiz = new Quiz("Capitals","learning the capitals of the countries");
+        Quiz quiz = new Quiz("Capital cities",
+                "This quiz is designed for them, who want to learn the capitals of the countries " +
+                        "and improve own geographical knowledge.");
         Question[] questions = {
                 new Question("What is the capital of Norway?",quiz),
                 new Question("What is the capital of Austria?",quiz),
