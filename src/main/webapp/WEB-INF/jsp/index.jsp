@@ -36,7 +36,7 @@
                     <div class="carousel-caption">
                         <h1>${quiz.title}</h1>
                         <p> ${quiz.description}</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Start quiz</a></p>
+                        <p><a class="btn btn-lg btn-primary" href="/quiz/${quiz.id}" role="button">Start quiz</a></p>
                     </div>
                 </div>
             </div>
