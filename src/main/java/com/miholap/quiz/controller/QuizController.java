@@ -4,9 +4,12 @@ import com.miholap.quiz.componentBeans.QuizMB;
 import com.miholap.quiz.persistence.entities.Answer;
 import com.miholap.quiz.persistence.entities.Question;
 import com.miholap.quiz.persistence.entities.Quiz;
+import com.miholap.quiz.persistence.entities.Statistics;
 import com.miholap.quiz.services.IAnswerService;
 import com.miholap.quiz.services.IQuestionService;
 import com.miholap.quiz.services.IQuizService;
+import com.miholap.quiz.services.IStatisticsService;
+import com.sun.org.glassfish.external.statistics.Statistic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -25,60 +28,66 @@ public class QuizController {
     @Autowired
     QuizMB quizManager;
     @Autowired
-    IAnswerService answerService;
+    IStatisticsService statisticsService;
 
     @RequestMapping(value = "/quiz/{id}")
     public String startQuizWithId(@PathVariable("id") int id) {
-        quizManager.initManager(id,5);
+        if(quizManager.getQuiz() == null) {
+            quizManager.initManager(id,5);
+        }
+
         return "quiz";
     }
 
 
-    @RequestMapping(value = "/quiz/ajaxquestion", method = RequestMethod.GET)
+    @RequestMapping(value = "/quiz/htmlquestion", method = RequestMethod.GET)
     public @ResponseBody String getQuestions() {
         System.out.println("Debug Message from AjaxJQuery Controller.." + new Date().toString());
-
         StringBuilder result= new StringBuilder(500);
 
         if(!quizManager.hasNext()){
-            return "<p>Test complete</p>";
+            quizManager.calculateStatistics();
+            String statisticsId = ""+quizManager.getStatistics().getId();
+            quizManager.resetManager();
+            return statisticsId;
         }
 
         Question question = quizManager.next();
         System.out.println("DEBUG "+question);
         result.append("<label for=\"name\"><h3>"+question.getText()+"</h3> </label>\n");
-        for(Answer answer : answerService.getActiveAnswers(question)){
+        for(Answer answer : quizManager.getAnswersForCurrentQuestion()){
             result.append(  "<div class=\"radio\">\n" +
                     "   <label>\n" +
                     "      <input type=\"radio\" name=\"answer\" id=\"answer_"+answer.getId()+"\" \n" +
-                    "         value=\""+answer.getId()+"\" ><p>"+ answer.getText()+"</p>\n" +
+                    "         value=\""+answer.getId()+"\" /><p>"+ answer.getText()+"</p>\n" +
                     "   </label>\n" +
                     "</div>\n");
         }
-        result.append("<hr>\n");
-
         return result.toString();
     }
 
-/*    @RequestMapping(value = "/quiz/ajaxquestion", method = RequestMethod.GET)
-    public @ResponseBody String getQuestions() {
-        System.out.println("Debug Message from AjaxJQuery Controller.." + new Date().toString());
-        Quiz quiz = quizService.findById(1);
+    @RequestMapping(value = "/quiz/checkanswer/{id}", method = RequestMethod.POST)
+    public @ResponseBody String checkAnswer(@PathVariable("id") int answer_id) {
+        System.out.println("ANSWER ID = "+answer_id);
+        quizManager.addAnswerToStatistics(answer_id);
+        return "good";
+    }
 
-        StringBuilder result= new StringBuilder(500);
-
-        for(Question question : questionService.getNRandomQuestions(quiz,3)){
-            result.append("<label for=\"name\"><h3>"+question.getText()+"</h3> </label>\n");
-            for(Answer answer : answerService.getActiveAnswers(question)){
-                result.append(  "<div class=\"radio\">\n" +
-                        "   <label>\n" +
-                        "      <input type=\"radio\" name=\"answer\" id=\"answer_"+answer.getId()+"\" \n" +
-                        "         value=\""+answer.getId()+"\" ><p>"+ answer.getText()+"</p>\n" +
-                        "   </label>\n" +
-                        "</div>\n");
-            }
-            result.append("<hr>\n");
+    @RequestMapping(value = "/quiz/statistics/{id}", method = RequestMethod.GET)
+    public @ResponseBody String quizStatistics(@PathVariable("id") int statistics_id) {
+        Statistics statistics = statisticsService.findById(statistics_id);
+        if(statistics == null){
+            return "statistics not found";
         }
-        return result.toString();
-    }*/
+        int percent = (statistics.getRightAnswers()*100)/statistics.getQuestions();
+        //aria-valuenow=""+statistics.getRightAnswers()+""
+        //class="sr-only"
+        String result =
+                "<div class=\"progress\">\n" +
+                "  <div class=\"progress-bar progress-bar-success\" role=\"progressbar\"  aria-valuemin=\"0\" aria-valuemax=\""+statistics.getQuestions()+"\" style=\"width: "+percent+"%\">\n" +
+                "    <span >"+statistics.getRightAnswers()+"</span>\n" +
+                "  </div>\n" +
+                "</div>";
+        return result;
+    }
 }

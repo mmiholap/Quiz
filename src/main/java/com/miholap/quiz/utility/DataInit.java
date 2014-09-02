@@ -1,8 +1,6 @@
 package com.miholap.quiz.utility;
 
-import com.miholap.quiz.persistence.entities.Answer;
-import com.miholap.quiz.persistence.entities.Question;
-import com.miholap.quiz.persistence.entities.Quiz;
+import com.miholap.quiz.persistence.entities.*;
 import com.miholap.quiz.services.IAnswerService;
 import com.miholap.quiz.services.IQuestionService;
 import com.miholap.quiz.services.IQuizService;
@@ -24,11 +22,13 @@ public class DataInit {
     @Autowired
     private  IAnswerService answerService;
 
-    //@Autowired
-    //private IUserService userService;
+    @Autowired
+    private IUserService userService;
 
     @PostConstruct
     public void creationFullQuizData(){
+        User user = new User("anonymous","", Role.USER,"");
+        userService.create(user);
         Quiz quiz = new Quiz("Capital cities",
                 "This quiz is designed for them, who want to learn the capitals of the countries " +
                         "and improve own geographical knowledge.");
