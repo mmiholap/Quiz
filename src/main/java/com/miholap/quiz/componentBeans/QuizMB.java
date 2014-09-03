@@ -2,6 +2,7 @@ package com.miholap.quiz.componentBeans;
 
 import com.miholap.quiz.persistence.entities.*;
 import com.miholap.quiz.services.*;
+import com.sun.javafx.binding.StringFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class QuizMB implements Iterable<Question>{
     private Iterator<Question> iterator;
     private int quizSize;
     private int rightAnswers;
-    private int currentQuestionId;
+    private Question currentQuestion;
     private Map<Integer,List<Answer>> answersMap ;
 
     public void initManager(int qzId, int nQuestions){
@@ -44,6 +45,10 @@ public class QuizMB implements Iterable<Question>{
 
     }
 
+    public void refreshPage(){
+
+    }
+
     public void resetManager(){
         quiz = null;
         statistics = null;
@@ -51,7 +56,7 @@ public class QuizMB implements Iterable<Question>{
         iterator = null;
         quizSize = 0;
         rightAnswers = 0;
-        currentQuestionId = 0;
+        currentQuestion = null;
         answersMap = null;
     }
 
@@ -62,7 +67,7 @@ public class QuizMB implements Iterable<Question>{
     }
 
     public List<Answer> getAnswersForCurrentQuestion(){
-        return answersMap.get(currentQuestionId);
+        return answersMap.get(currentQuestion.getId());
     }
 
     public void addAnswerToStatistics(int answerId){
@@ -84,7 +89,7 @@ public class QuizMB implements Iterable<Question>{
 
     public Question next(){
         Question q = iterator.next();
-        currentQuestionId = q.getId();
+        currentQuestion = q;
         return q;
     }
 
@@ -94,6 +99,14 @@ public class QuizMB implements Iterable<Question>{
     @Override
     public Iterator<Question> iterator() {
         return iterator;
+    }
+
+    public Question getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(Question currentQuestion) {
+        this.currentQuestion = currentQuestion;
     }
 
     public IStatisticsService getStatisticsService() {

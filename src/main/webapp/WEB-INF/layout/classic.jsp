@@ -17,16 +17,10 @@
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Quiz Service</a>
+                <a class="navbar-brand" href="/">Quiz Service</a>
             </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
+            <div id="links" class="collapse navbar-collapse">
+                <ul  class="nav navbar-nav">
                     <li class="active"><a href="/">Home</a></li>
                     <li><a href="#">About</a></li>
                     <li><a href="#contact">Contact</a></li>
@@ -43,12 +37,27 @@
             </div><!--/.nav-collapse -->
         </div>
     </div>
+</div>
 
+    <script type="text/javascript">
+        $('.navbar li').click(function(e) {
+            $('.navbar li.active').removeClass('active');
+            var $this = $(this);
+            if (!$this.hasClass('active')) {
+                $this.addClass('active');
+            }
+
+            var value = $.cookie('test');
+            if(!(value === undefined)){
+                e.preventDefault();
+            }
+        });
+    </script>
 
     <%--<div class="container">--%>
                 <tiles:insertAttribute name="body" />
     <%--</div>--%>
-</div>
+
 
 <tiles:insertAttribute name="footer"/>
 

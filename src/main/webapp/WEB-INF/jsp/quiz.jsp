@@ -1,68 +1,23 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <div class="jumbotron">
     <div class="container">
-        <br><br><br><br>
+        <br><br>
+        <div class="row">
+            <div id="timer" class="col-md-2 col-lg-offset-1">
+                <span id="minutes" class="label label-info">00</span>
+                <span class="label label-info">:</span>
+                <span id="seconds" class="label label-info">00</span>
+            </div>
+        </div>
         <div id="result" ></div>
-        <p>
-            <button id="nextBtn" type="button" class="btn btn-default btn-xs">
+        <p id="forButton" class="col-md-5 col-md-offset-5">
+            <button id="nextBtn" type="button" class="btn btn-default btn-xs col-md-6">
                 <h4>next question</h4>
             </button>
         </p>
     </div>
 </div>
 
-<script type="text/javascript">
-    function getQuestionAjax() {
-        $.ajax({
-            url : 'htmlquestion.html',
-            success : function(data) {
-                if(!isNaN(data)){
-                    $.get("statistics/"+data, function(data){
-                        $('#result').html(data);
-                    });
-
-                    if($.removeCookie('test')){
-                    }
-
-                } else {
-                    $('#result').html(data);
-                }
-                $.cookie('state',data);
-            }
-        });
-    }
-
-    var answer_id = "-1";
-    function sendAnswerId(){
-        $.post('checkanswer/'+answer_id);
-    }
-
-    $('#nextBtn').click( function(){
-        sendAnswerId();
-        getQuestionAjax();
-        answer_id = "-1";
-    });
-
-
-    $("body").on("change","input[name='answer']" ,function() {
-        answer_id = $(this).val();
-    });
-
-
-    window.onload = function(){
-        var value = $.cookie('test');
-        if(value === undefined){
-            $.cookie('test','run');
-            getQuestionAjax();
-        }
-
-        var stateOnReload = $.cookie('state');
-        if(!(stateOnReload === undefined)){
-            $('#result').html(stateOnReload);
-        }
-    };
-</script>
-
-<script type="text/javascript">
-    var intervalId = 0;
-    //intervalId = setInterval(getQuestionAjax, 10000);
-</script>
+<script src="<spring:url value='/resources/js/quiz.js'/>"></script>

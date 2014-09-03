@@ -32,17 +32,30 @@ public class DataInit {
         Quiz quiz = new Quiz("Capital cities",
                 "This quiz is designed for them, who want to learn the capitals of the countries " +
                         "and improve own geographical knowledge.");
+        quiz.setImagePath("/resources/images/capitalsQuiz.jpg");//
+
+        /*Quiz quiz1 = new Quiz("Capital cities",
+                "This quiz is designed for them, who want to learn the capitals of the countries " +
+                        "and improve own geographical knowledge.");
+        quiz1.setImagePath("/resources/images/capitalsQuiz.jpg");//
+        Quiz quiz2 = new Quiz("Capital cities",
+                "This quiz is designed for them, who want to learn the capitals of the countries " +
+                        "and improve own geographical knowledge.");
+        quiz2.setImagePath("/resources/images/capitalsQuiz.jpg");//
+        quizService.create(quiz1);
+        quizService.create(quiz2);*/
+
         Question[] questions = {
-                new Question("What is the capital of Norway?",quiz),
-                new Question("What is the capital of Austria?",quiz),
-                new Question("What is the capital of South Korea?",quiz),
-                new Question("What is the capital of Hungary?",quiz),
-                new Question("What is the capital of Mongolia?",quiz),
-                new Question("What is the capital of Iceland?",quiz),
-                new Question("What is the capital of Spain?",quiz),
-                new Question("What is the capital of Chili?",quiz),
-                new Question("What is the capital of Ukraine?",quiz),
-                new Question("What is the capital of India?",quiz)
+                new Question("What is the capital of Norway?","/resources/images/norway.jpg",quiz),
+                new Question("What is the capital of Austria?","/resources/images/austria.jpg",quiz),
+                new Question("What is the capital of South Korea?","/resources/images/south_korea.jpg",quiz),
+                new Question("What is the capital of Hungary?","/resources/images/hungary.jpg",quiz),
+                new Question("What is the capital of Mongolia?","/resources/images/mongolia.jpg",quiz),
+                new Question("What is the capital of Iceland?","/resources/images/iceland.jpg",quiz),
+                new Question("What is the capital of Spain?","/resources/images/spain.jpg",quiz),
+                new Question("What is the capital of Chile?","/resources/images/chile.jpg",quiz),
+                new Question("What is the capital of Ukraine?","/resources/images/ukraine.jpg",quiz),
+                new Question("What is the capital of India?","/resources/images/india.jpg",quiz)
         };
 
         Answer[][] answers ={

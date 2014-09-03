@@ -18,6 +18,9 @@ public class Question implements Serializable{
     private int id;
     private String text;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @ManyToOne
     @JoinColumn(name="quiz_id")
     private Quiz quiz;
@@ -36,6 +39,12 @@ public class Question implements Serializable{
 
     public Question(String text, Quiz quiz) {
         this.text = text;
+        this.quiz = quiz;
+    }
+
+    public Question(String text, String imagePath, Quiz quiz) {
+        this.text = text;
+        this.imagePath = imagePath;
         this.quiz = quiz;
     }
 
@@ -74,6 +83,14 @@ public class Question implements Serializable{
                 ", answerTime=" + answerTime +
                 ", isActive=" + isActive +
                 '}';
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public Collection<Answer> getAnswers() {

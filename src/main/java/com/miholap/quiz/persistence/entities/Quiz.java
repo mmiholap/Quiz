@@ -16,6 +16,9 @@ public class Quiz implements Serializable{
 
     private String description;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @OneToMany(mappedBy = "quiz",fetch = FetchType.EAGER)
     private Collection<Question> questions;
 
@@ -32,6 +35,12 @@ public class Quiz implements Serializable{
     public Quiz(String title, String description) {
         this.description = description;
         this.title = title;
+    }
+
+    public Quiz(String title, String description, String imagePath) {
+        this.title = title;
+        this.description = description;
+        this.imagePath = imagePath;
     }
 
     @Override
@@ -63,6 +72,14 @@ public class Quiz implements Serializable{
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + title.hashCode();
         return result;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getTitle() {
