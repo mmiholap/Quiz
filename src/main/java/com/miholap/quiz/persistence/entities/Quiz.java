@@ -12,8 +12,10 @@ public class Quiz implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(length=1000)
     private String title;
 
+    @Column(length=1000)
     private String description;
 
     @Column(name = "image_path")

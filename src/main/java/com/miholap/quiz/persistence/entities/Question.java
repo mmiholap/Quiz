@@ -16,6 +16,8 @@ public class Question implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(length=1000)
     private String text;
 
     @Column(name = "image_path")

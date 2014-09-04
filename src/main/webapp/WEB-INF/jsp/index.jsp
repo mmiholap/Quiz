@@ -28,7 +28,7 @@
     <div class="carousel-inner">
         <c:forEach items="${quizs}" var="quiz" varStatus="loop">
             <div class="item<c:if test="${loop.index==0}"> active</c:if>">
-                <img src="${quiz.imagePath}" alt="First slide">
+                <img src="${quiz.imagePath}" alt="First slide" style="width: 1200px; height: 800px;">
                 <div class="container">
                     <div class="carousel-caption ">
                         <h1>${quiz.title}</h1>

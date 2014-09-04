@@ -14,12 +14,17 @@ public class Answer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(length=1000)
     private String text;
+
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+
     @Column(name = "is_right")
     private boolean isRight = false;
+
     @Column(name = "is_active")
     private boolean isActive = true;
 

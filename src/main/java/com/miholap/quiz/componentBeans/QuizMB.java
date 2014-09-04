@@ -34,18 +34,14 @@ public class QuizMB implements Iterable<Question>{
 
     public void initManager(int qzId, int nQuestions){
         setQuiz(quizService.findById(qzId));
-        quizSize = nQuestions;
         questions = questionService.getNRandomQuestions(quiz,nQuestions);
+        quizSize = questions.size();
         iterator = questions.iterator();
         answersMap = new HashMap<>(20);
         for(Question question : questions){
             answersMap.put(question.getId(),answerService.getActiveAnswers(question));
         }
         //statistics = new Statistics();
-
-    }
-
-    public void refreshPage(){
 
     }
 

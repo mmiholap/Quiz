@@ -10,6 +10,7 @@ public class Tag implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(length=60)
     private String title;
 
     @ManyToMany(mappedBy = "tags")
